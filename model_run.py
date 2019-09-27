@@ -1,9 +1,9 @@
-import cPickle
+import _pickle as cPickle
 import itertools
 import random
 
 import numpy as np
-from sklearn.cross_validation import KFold
+from sklearn.model_selection import KFold
 from sklearn.decomposition import TruncatedSVD
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from scipy.sparse import vstack
@@ -227,8 +227,8 @@ def get_data_segment_angles(model_id, driver_id, repeat, test=False, segment_ver
     set2 = driver_test + other_test
 
   # create features for each (segment, angle, segment) tuple
-  set1 = [['%s_%s_%s' % (d[0][i-1], d[1][i-1], d[0][i]) for i in xrange(1, len(d[0]))] for d in set1]
-  set2 = [['%s_%s_%s' % (d[0][i-1], d[1][i-1], d[0][i]) for i in xrange(1, len(d[0]))] for d in set2]
+  set1 = [['%s_%s_%s' % (d[0][i-1], d[1][i-1], d[0][i]) for i in range(1, len(d[0]))] for d in set1]
+  set2 = [['%s_%s_%s' % (d[0][i-1], d[1][i-1], d[0][i]) for i in range(1, len(d[0]))] for d in set2]
 
   set1 = [util.get_list_string(d) for d in set1]
   set2 = [util.get_list_string(d) for d in set2]
@@ -280,8 +280,8 @@ def get_data_segment_angles_v2(model_id, driver_id, repeat, test=False, segment_
     set2 = driver_test + other_test
 
   # create features for each (segment, angle, segment) tuple
-  set1 = [['%s_%s' % (d[0][i-1], d[1][i-1]) for i in xrange(1, len(d[0]))] for d in set1]
-  set2 = [['%s_%s' % (d[0][i-1], d[1][i-1]) for i in xrange(1, len(d[0]))] for d in set2]
+  set1 = [['%s_%s' % (d[0][i-1], d[1][i-1]) for i in range(1, len(d[0]))] for d in set1]
+  set2 = [['%s_%s' % (d[0][i-1], d[1][i-1]) for i in range(1, len(d[0]))] for d in set2]
 
   set1 = [util.get_list_string(d) for d in set1]
   set2 = [util.get_list_string(d) for d in set2]
@@ -328,8 +328,8 @@ def get_data_segment_v2(model_id, driver_id, repeat, test=False, segment_version
     set1 = driver_train + other_train
     set2 = driver_test + other_test
 
-  set1 = [['%s_%s_%s_%s' % (d[0][i-1], d[2][i-1], d[1][i-1], d[0][i]) for i in xrange(1, len(d[0]))] for d in set1]
-  set2 = [['%s_%s_%s_%s' % (d[0][i-1], d[2][i-1], d[1][i-1], d[0][i]) for i in xrange(1, len(d[0]))] for d in set2]
+  set1 = [['%s_%s_%s_%s' % (d[0][i-1], d[2][i-1], d[1][i-1], d[0][i]) for i in range(1, len(d[0]))] for d in set1]
+  set2 = [['%s_%s_%s_%s' % (d[0][i-1], d[2][i-1], d[1][i-1], d[0][i]) for i in range(1, len(d[0]))] for d in set2]
 
   set1 = [util.get_list_string(d) for d in set1]
   set2 = [util.get_list_string(d) for d in set2]
@@ -740,13 +740,13 @@ def get_data_heading_stops_v2(model_id, driver_id, repeat, test=False):
 HEADING_DATA_FUNCTIONS = (get_data_heading, get_data_heading_v2, get_data_heading_svd, \
     get_data_heading_stops, get_data_heading_v3, get_data_heading_stops_v2)
 
-def run_model((model_id, driver_id, Model, get_data, repeat)):
+def run_model(model_id, driver_id, Model, get_data, repeat):
   testY = [1] * settings.SMALL_CHUNK + [0] * settings.SMALL_CHUNK
 
-  if settings.ENABLE_CACHE:
-    predictions = util.get_results(Model, get_data, driver_id, False, repeat)
-    if predictions is not False:
-      return predictions, testY
+  # if settings.ENABLE_CACHE:
+  #   predictions = util.get_results(Model, get_data, driver_id, False, repeat)
+  #   if predictions is not False:
+  #     return predictions, testY
 
   multiplier = 4 if get_data in HEADING_DATA_FUNCTIONS else 1
 
@@ -771,8 +771,8 @@ def run_model((model_id, driver_id, Model, get_data, repeat)):
   model = Model(trainX, trainY, driver_id)
   predictions = model.predict(testX)
 
-  if settings.ENABLE_CACHE:
-    util.cache_results(Model, get_data, driver_id, False, predictions, repeat)
+  # if settings.ENABLE_CACHE:
+  #   util.cache_results(Model, get_data, driver_id, False, predictions, repeat)
 
   return predictions, testY
 
@@ -824,7 +824,7 @@ def test_model_heading(model_id, driver_id, Model, get_data, repeat):
     util.cache_results(Model, get_data, driver_id, True, predictions, repeat)
   return driver_id, predictions
 
-def test_model((model_id, driver_id, Model, get_data, repeat)):
+def test_model(model_id, driver_id, Model, get_data, repeat):
   if settings.ENABLE_CACHE:
     predictions = util.get_results(Model, get_data, driver_id, True, repeat)
     if predictions is not False:

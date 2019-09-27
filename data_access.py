@@ -25,8 +25,8 @@ class DataAccess:
     data = open(filename, 'r').read()
     data = [[int(x) for x in row.split(',')] if row else [] for row in data.split('\n')]
     if data == [[]]:
-      print driver_id
-      print ride_id
+      print (driver_id)
+      print (ride_id)
     return data
 
   def get_rides_segments(self, driver_id, version=1):
@@ -48,7 +48,7 @@ class DataAccess:
   def get_random_drivers(self, size, seed, exception):
     # old version for small samples (without replacement)
     if size <= 2000:
-      sample = [settings.DRIVER_IDS[i] for i in seed.sample(xrange(len(settings.DRIVER_IDS)), size+1)]
+      sample = [settings.DRIVER_IDS[i] for i in seed.sample(range(len(settings.DRIVER_IDS)), size+1)]
       if exception in sample:
         sample.remove(exception)
       else:
@@ -71,9 +71,9 @@ class DataAccess:
     else:
       rides = list(self.get_rides_segments(driver_id, version=version))
 
-    split_train = set([i for i in seed.sample(xrange(200), size_train)])
+    split_train = set([i for i in seed.sample(range(200), size_train)])
     rides_train = [rides[i] for i in split_train]
-    rides_test = [rides[i] for i in xrange(200) if i not in split_train]
+    rides_test = [rides[i] for i in range(200) if i not in split_train]
     return rides_train, rides_test
 
   def get_random_rides(self, size, driver_id, seed=None, segments=False, version=1):

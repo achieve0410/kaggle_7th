@@ -101,7 +101,7 @@ def weight_analysis(verbose=0, stack_option='s'):
 
   lasso = Lasso(alpha=0.0, positive=True)
   trainX = []
-  for row_id in xrange(len(testY)):
+  for row_id in range(len(testY)):
     train_row = [predictions[i][row_id] for i in keys]
     trainX.append(train_row)
 

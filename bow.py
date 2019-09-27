@@ -31,9 +31,9 @@ def segment_driver(driver_id):
     ride = [p + [i]  for i, p in enumerate(smoothen(ride))] # enrich with timestamp
     ride = rdp(ride, epsilon=10)
 
-    lengths = [util.euclidian_distance(ride[i-1], ride[i]) for i in xrange(1, len(ride))]
-    times = [ride[i][2] - ride[i-1][2] for i in xrange(1, len(ride))]
-    angles = [util.get_angle(ride[i-2], ride[i-1], ride[i]) for i in xrange(2, len(ride))]
+    lengths = [util.euclidian_distance(ride[i-1], ride[i]) for i in range(1, len(ride))]
+    times = [ride[i][2] - ride[i-1][2] for i in range(1, len(ride))]
+    angles = [util.get_angle(ride[i-2], ride[i-1], ride[i]) for i in range(2, len(ride))]
 
     # bucket the values
     lengths = util.bucket(np.log(lengths), 25, [2.2,8]) # [int(l) for l in lengths]
@@ -57,9 +57,9 @@ def segment_driver_v2(driver_id):
     ride = [p + [i]  for i, p in enumerate(ride)] # enrich with timestamp
     ride = rdp(ride, epsilon=4)
 
-    lengths = [util.euclidian_distance(ride[i-1], ride[i]) for i in xrange(1, len(ride))]
-    times = [ride[i][2] - ride[i-1][2] for i in xrange(1, len(ride))]
-    angles = [util.get_angle(ride[i-2], ride[i-1], ride[i]) for i in xrange(2, len(ride))]
+    lengths = [util.euclidian_distance(ride[i-1], ride[i]) for i in range(1, len(ride))]
+    times = [ride[i][2] - ride[i-1][2] for i in range(1, len(ride))]
+    angles = [util.get_angle(ride[i-2], ride[i-1], ride[i]) for i in range(2, len(ride))]
 
     lengths = np.histogram(lengths, bins=range(0, 700, 20) + [1000000000])[0]
     times = np.histogram(times, bins=range(0, 60, 4) + [1000000000])[0]

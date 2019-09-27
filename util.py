@@ -39,7 +39,7 @@ def euclidian_distance(p1, p2):
   return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
 
 def euclidian_distances(ride):
-  return [euclidian_distance(ride[i], ride[i+1]) for i in xrange(len(ride) - 1)]
+  return [euclidian_distance(ride[i], ride[i+1]) for i in range(len(ride) - 1)]
 
 def view_ride_speed(ride):
   sm_ride = savgol_filter(np.array(ride).T, 7, 2).T
@@ -606,16 +606,16 @@ def bucket(values, bins, cutoff):
 
 def get_accelerations(ride):
   distances = euclidian_distances(ride)
-  accelerations = [distances[i] - distances[i-1] for i in xrange(1, len(distances))]
+  accelerations = [distances[i] - distances[i-1] for i in range(1, len(distances))]
   bucketed = bucket(accelerations, 10, [-2,2])
-  words = ['a%s_%s' % (bucketed[i-1], bucketed[i]) for i in xrange(1, len(bucketed))]
+  words = ['a%s_%s' % (bucketed[i-1], bucketed[i]) for i in range(1, len(bucketed))]
   return words
 
 def get_accelerations_v2(ride):
   distances = euclidian_distances(ride)
-  accelerations = [distances[i] - distances[i-1] for i in xrange(1, len(distances))]
+  accelerations = [distances[i] - distances[i-1] for i in range(1, len(distances))]
   bucketed = np.digitize(accelerations, np.array(range(-30, 30, 3)) / 10.0)
-  words = ['a%s_%s' % (bucketed[i-1], bucketed[i]) for i in xrange(1, len(bucketed))]
+  words = ['a%s_%s' % (bucketed[i-1], bucketed[i]) for i in range(1, len(bucketed))]
   return words
 
 def _get_cache_file(model, get_data, driver_id, test, repeat):
@@ -732,9 +732,9 @@ def get_similarities(rides):
     GAP = 15
     ride = [p + [i]  for i, p in enumerate(ride)] # enrich with timestamp
     #ride = rdp(ride, epsilon=20)
-    lengths = [euclidian_distance(ride[i-GAP], ride[i]) for i in xrange(GAP, len(ride))]
+    lengths = [euclidian_distance(ride[i-GAP], ride[i]) for i in range(GAP, len(ride))]
     #times = [ride[i][2] - ride[i-1][2] for i in xrange(1, len(ride))]
-    angles = [get_angle(ride[i-2 * GAP], ride[i- GAP], ride[i]) for i in xrange(2 * GAP, len(ride))]
+    angles = [get_angle(ride[i-2 * GAP], ride[i- GAP], ride[i]) for i in range(2 * GAP, len(ride))]
 
     # # average window
     # lengths2 = []

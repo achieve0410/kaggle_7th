@@ -19,10 +19,20 @@ if __name__ == '__main__':
   #run_model((100, 203, model_def.Model_GBC, model_run.get_data_accel_v2_svd, 1)); raise Exception
 
   pool = multiprocessing.Pool(processes=1)
-  results = pool.map(
-      run_model,
-      map(lambda x: (100, x, model_def.Model_LR2, model_run.get_data_movements_accel, 1), settings.DRIVER_IDS[:10])
-  )
-  predictions = np.array(list(itertools.chain(*[r[0] for r in results])))
-  testY = list(itertools.chain(*[r[-1] for r in results]))
-  logging.info(util.compute_auc(testY, predictions))
+  # results = pool.map(
+  #     run_model,
+  #     map(lambda x: (100, x, model_def.Model_LR2, model_run.get_data_movements_accel, 1), settings.DRIVER_IDS[:10])
+  # )
+  # results = list(map(
+  #     run_model,
+  #     # map(lambda x: (100, x, model_def.Model_LR2, model_run.get_data_movements_accel, 1), settings.DRIVER_IDS[:10])
+  #     map(lambda x: (100, x, model_def.Model_LR2, model_run.get_data_movements_accel, 1), settings.DRIVER_IDS[:10])
+  # ))
+  ## model_id, driver_id, Model, get_data, repeat
+  results = run_model(100, settings.DRIVER_IDS[10], model_def.Model_GBC, model_run.get_data_movements_accel, 1)
+  # predictions = np.array(list(itertools.chain(*[r[0] for r in results])))
+  predictions = np.array(list(itertools.chain([r[1] for r in results])))
+  # testY = list(itertools.chain(*[r[-1] for r in results]))
+  testY = list(itertools.chain([r[-1] for r in results]))
+  print("results : {}, testY : {}, predictions :{}".format(results, testY, predictions))
+  # logging.info(util.compute_auc(testY, predictions))

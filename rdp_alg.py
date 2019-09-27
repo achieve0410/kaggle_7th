@@ -45,7 +45,7 @@ def _rdp(M, epsilon, dist):
     dmax = 0.0
     index = -1
 
-    for i in xrange(1, M.shape[0]):
+    for i in range(1, M.shape[0]):
         d = dist(M[i], M[0], M[-1])
 
         if d > dmax:
