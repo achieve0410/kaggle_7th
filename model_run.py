@@ -741,6 +741,7 @@ HEADING_DATA_FUNCTIONS = (get_data_heading, get_data_heading_v2, get_data_headin
     get_data_heading_stops, get_data_heading_v3, get_data_heading_stops_v2)
 
 def run_model(model_id, driver_id, Model, get_data, repeat):
+  print("model_id: {}, driver_id: {}, Model: {}, get_data: {}, repeat: {}".format(model_id, driver_id, Model, get_data, repeat))
   testY = [1] * settings.SMALL_CHUNK + [0] * settings.SMALL_CHUNK
 
   # if settings.ENABLE_CACHE:
