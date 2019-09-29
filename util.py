@@ -692,7 +692,7 @@ def build_features4(ride, step=3, version=1):
   ride1 = np.roll(ride2, step, axis=0)
   ride0 = np.roll(ride1, step, axis=0)
 
-  # print("ride2 : {}, ride1 : {}, ride0 : {}".format(ride2, ride1, ride0))
+  print("ride2 : {}, ride1 : {}, ride0 : {}".format(len(ride2), len(ride1), len(ride0)))
 
   ride0 = ride0[step*2:]
   ride1 = ride1[step*2:]
@@ -725,7 +725,7 @@ def build_features4(ride, step=3, version=1):
   ACCEL_THR = np.array([-3, -1.5, -0.3, 0.3, 1.5, 3]) * step
   accel = np.digitize(accel, ACCEL_THR)
 
-  print("distances : {}, angles : {}, accel: {}".format(distances, angles, accel))
+  # print("distances : {}, angles : {}, accel: {}".format(distances, angles, accel))
 
   movements = np.vstack((distances, angles, accel)).transpose()
   movement_string = ' '.join(['%s_%s_%s' % (m[0], m[1], m[2]) for m in movements])

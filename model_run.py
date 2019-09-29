@@ -416,16 +416,23 @@ def get_data_movements_accel(model_id, driver_id, repeat, test=False, step=3, tf
   if test:
     set1 = list(da.get_rides(driver_id))
     set2 = list(da.get_random_rides(settings.BIG_CHUNK_TEST * repeat, driver_id, segments=False, seed=seed))
+    
   else:
     driver_train, driver_test = da.get_rides_split(driver_id, settings.BIG_CHUNK, segments=False)
     other_train = list(da.get_random_rides(settings.BIG_CHUNK * repeat, driver_id, segments=False, seed=seed))
     other_test = list(da.get_random_rides(settings.SMALL_CHUNK, driver_id, segments=False))
+    # print("driver_train: {}, {}, \n\ndriver_test: {}, {}".format(driver_train[:1], len(driver_train), driver_test[:1], len(driver_test)))
+
 
     set1 = driver_train + other_train
     set2 = driver_test + other_test
 
+    # print("set1: {}, {}, \n\nset2: {}, {}".format(set1[:1], len(set1), set2[:1], len(set2)))
+
   set1 = [util.build_features4(r, step=step, version=version) for r in set1]
   set2 = [util.build_features4(r, step=step, version=version) for r in set2]
+
+  # print(set2[0], len(set2[0]))
 
   if tf:
     vectorizer = TfidfVectorizer(min_df=min_df, ngram_range=ngram_range)
@@ -754,6 +761,7 @@ def run_model(model_id, driver_id, Model, get_data, repeat):
   trainY = [1] * settings.BIG_CHUNK * multiplier * repeat + \
       [0] * settings.BIG_CHUNK * multiplier * repeat
   trainX, testX = get_data(model_id, driver_id, repeat)
+  # print(trainX.shape[0], testX.shape[0], trainX.shape[1], testX.shape[1])
 
   if type(trainX) in [scipy.sparse.csr.csr_matrix, scipy.sparse.coo.coo_matrix]:
     trainX = scipy.sparse.vstack(

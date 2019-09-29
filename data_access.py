@@ -12,6 +12,7 @@ class DataAccess:
 
   def get_ride(self, driver_id, ride_id):
     filename = '%s/%s/%s.csv' % (settings.DATA_FOLDER, driver_id, ride_id)
+    # print("filename : {}".format(filename))
     data = open(filename, 'r').read()
     data = [[float(x) for x in row.split(',')] for row in data.split('\n')[1:-1]]
     return data
