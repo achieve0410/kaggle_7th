@@ -692,22 +692,28 @@ def build_features4(ride, step=3, version=1):
   ride1 = np.roll(ride2, step, axis=0)
   ride0 = np.roll(ride1, step, axis=0)
 
+  if(len(ride2)!=864):
+        return ' '
+
   print("ride2 : {}, ride1 : {}, ride0 : {}".format(len(ride2), len(ride1), len(ride0)))
 
   ride0 = ride0[step*2:]
   ride1 = ride1[step*2:]
   ride2 = ride2[step*2:]
 
-  a1 = ride1 - ride0
-  a2 = ride2 - ride1
+  a1 = np.array(ride1 - ride0)
+  a2 = np.array(ride2 - ride1)
 
-  distances1 = np.linalg.norm(a1, axis=1)
-  distances2 = np.linalg.norm(a2, axis=1)
-  distances = distances1 + distances2
+  distances1 = np.linalg.norm(a1, axis=1).reshape(-1, 1)
+  distances2 = np.linalg.norm(a2, axis=1).reshape(-1, 1)
+  distances = (distances1 + distances2)
   accel = distances2 - distances1
 
-  # print("distance1 : {}, distance2 : {}, distance: {}, accel: {}".format(distances2, distances1, distances, accel))
+  result = np.hstack([distances, accel])
+  np.savetxt('output.csv', result, delimiter=',')
 
+  # print("distance1 : {}, distance2 : {}, distance: {}, accel: {}".format(distances2, distances1, distances, accel))
+  # print("length of distance1, distance2, distance, accel = {}, {}, {}, {}".format(len(distances1), len(distances2), len(distances), len(accel)))
   np.seterr(all='ignore')
   angles = np.arccos((a1 * a2).sum(1) / (distances1 * distances2))
   np.seterr(all='print')

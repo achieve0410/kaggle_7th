@@ -432,6 +432,8 @@ def get_data_movements_accel(model_id, driver_id, repeat, test=False, step=3, tf
   set1 = [util.build_features4(r, step=step, version=version) for r in set1]
   set2 = [util.build_features4(r, step=step, version=version) for r in set2]
 
+
+
   # print(set2[0], len(set2[0]))
 
   if tf:
