@@ -696,6 +696,10 @@ def build_features4(ride, step=3, version=1):
         return ' '
 
   print("ride2 : {}, ride1 : {}, ride0 : {}".format(len(ride2), len(ride1), len(ride0)))
+  
+  print(ride2[0:10])
+  print(ride1[0:10])
+  print(ride0[0:10])
 
   ride0 = ride0[step*2:]
   ride1 = ride1[step*2:]
