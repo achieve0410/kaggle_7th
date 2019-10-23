@@ -15,6 +15,8 @@ class DataAccess:
     # print("filename : {}".format(filename))
     data = open(filename, 'r').read()
     data = [[float(x) for x in row.split(',')] for row in data.split('\n')[1:-1]]
+    # if(ride_id==1):
+    #   print("aa: {}".format(data[:30]))
     return data
 
   def get_rides(self, driver_id):
@@ -68,13 +70,16 @@ class DataAccess:
   def get_rides_split(self, driver_id, size_train, segments=False, version=1):
     seed = random.Random(x=driver_id)
     if not segments:
-      rides = list(self.get_rides(driver_id))
+      rides = list(self.get_rides(driver_id)) ## rides[0] = gps of 842 row data, rides[1] = gps of 958 row data, ...
+      # print(len(rides[0]))
     else:
       rides = list(self.get_rides_segments(driver_id, version=version))
 
     split_train = set([i for i in seed.sample(range(200), size_train)])
+    ## split 200 trips
     rides_train = [rides[i] for i in split_train]
     rides_test = [rides[i] for i in range(200) if i not in split_train]
+    # print("rides_train: {}\n rides_test: {}\n".format(rides_train, rides_test))
     return rides_train, rides_test
 
   def get_random_rides(self, size, driver_id, seed=None, segments=False, version=1):

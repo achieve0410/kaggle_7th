@@ -429,8 +429,8 @@ def get_data_movements_accel(model_id, driver_id, repeat, test=False, step=3, tf
 
     # print("set1: {}, {}, \n\nset2: {}, {}".format(set1[:1], len(set1), set2[:1], len(set2)))
 
-  set1 = [util.build_features4(r, step=step, version=version) for r in set1]
-  set2 = [util.build_features4(r, step=step, version=version) for r in set2]
+  set1 = [util.build_features4(r, i, step=step, version=version) for i, r in enumerate(set1)]
+  set2 = [util.build_features4(r, i, step=step, version=version) for i, r in enumerate(set2)]
 
 
 

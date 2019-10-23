@@ -686,20 +686,20 @@ def build_features3(ride, step=5, version=1):
 
   return movement_string
 
-def build_features4(ride, step=3, version=1):
+def build_features4(ride, index, step=3, version=1):
   MIN_DIST_TH = 7 if version == 1 else 0.2
   ride2 = np.array(ride)
   ride1 = np.roll(ride2, step, axis=0)
   ride0 = np.roll(ride1, step, axis=0)
 
-  if(len(ride2)!=864):
-        return ' '
+  # if(len(ride2)!=842):
+  #       return ' '
 
-  print("ride2 : {}, ride1 : {}, ride0 : {}".format(len(ride2), len(ride1), len(ride0)))
+  # print("ride2 : {}, ride1 : {}, ride0 : {}".format(len(ride2), len(ride1), len(ride0)))
   
-  print(ride2[0:10])
-  print(ride1[0:10])
-  print(ride0[0:10])
+  # print("ride2: {}".format(ride2[0:30]))
+  # print("ride1: {}".format(ride1[0:30]))
+  # print("ride0: {}".format(ride0[0:30]))
 
   ride0 = ride0[step*2:]
   ride1 = ride1[step*2:]
@@ -708,18 +708,24 @@ def build_features4(ride, step=3, version=1):
   a1 = np.array(ride1 - ride0)
   a2 = np.array(ride2 - ride1)
 
-  distances1 = np.linalg.norm(a1, axis=1).reshape(-1, 1)
-  distances2 = np.linalg.norm(a2, axis=1).reshape(-1, 1)
+  distances1 = np.linalg.norm(a1, axis=1)
+  distances2 = np.linalg.norm(a2, axis=1)
   distances = (distances1 + distances2)
   accel = distances2 - distances1
 
-  result = np.hstack([distances, accel])
-  np.savetxt('output.csv', result, delimiter=',', fmt='%1.2f')
+  distances3 = np.linalg.norm(a1, axis=1).reshape(-1, 1)
+  distances4 = np.linalg.norm(a2, axis=1).reshape(-1, 1)
+  distance = (distances3 + distances4)
+  accels = distances3 - distances4
+
+  result = np.hstack([distance, accels])
+  np.savetxt('result/output'+str(index)+'.csv', result, delimiter=',', fmt='%1.2f')
 
   # print("distance1 : {}, distance2 : {}, distance: {}, accel: {}".format(distances2, distances1, distances, accel))
   # print("length of distance1, distance2, distance, accel = {}, {}, {}, {}".format(len(distances1), len(distances2), len(distances), len(accel)))
   np.seterr(all='ignore')
   angles = np.arccos((a1 * a2).sum(1) / (distances1 * distances2))
+  # print(angles)
   np.seterr(all='print')
   angles[distances1 < MIN_DIST_TH] = 0
   angles[distances2 < MIN_DIST_TH] = 0
@@ -739,6 +745,7 @@ def build_features4(ride, step=3, version=1):
 
   movements = np.vstack((distances, angles, accel)).transpose()
   movement_string = ' '.join(['%s_%s_%s' % (m[0], m[1], m[2]) for m in movements])
+  print(movement_string)
 
   return movement_string
 
