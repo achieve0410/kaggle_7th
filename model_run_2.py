@@ -13,7 +13,7 @@ from data_access import DataAccess
 import heading
 from model_def import Model_LR, Model_RFC, Model_SVC
 import settings
-import util
+import util_2
 
 def get_data_basic_big(model_id, driver_id, repeat, test=False, version=1):
   seed = random.Random(x=driver_id+model_id)
@@ -418,8 +418,8 @@ def get_data_movements_accel(model_id, driver_id, repeat, test=False, step=3, tf
     set2 = list(da.get_random_rides(settings.BIG_CHUNK_TEST * repeat, driver_id, segments=False, seed=seed))
     
   else:
-    driver_train, driver_test = da.get_rides_split(driver_id, settings.BIG_CHUNK, segments=False)
-    other_train = list(da.get_random_rides(settings.BIG_CHUNK * repeat, driver_id, segments=False, seed=seed))
+    driver_train, driver_test = da.get_rides_split(driver_id, settings.BIG_CHUNK, segments=False) ## 180:20 split
+    other_train = list(da.get_random_rides(settings.BIG_CHUNK * repeat, driver_id, segments=False, seed=seed)) ## 
     other_test = list(da.get_random_rides(settings.SMALL_CHUNK, driver_id, segments=False))
     # print("driver_train: {}, {}, \n\ndriver_test: {}, {}".format(driver_train[:1], len(driver_train), driver_test[:1], len(driver_test)))
 
@@ -429,8 +429,8 @@ def get_data_movements_accel(model_id, driver_id, repeat, test=False, step=3, tf
 
     # print("set1: {}, {}, \n\nset2: {}, {}".format(set1[:1], len(set1), set2[:1], len(set2)))
 
-  set1 = [util.build_features4(r, i, step=step, version=version) for i, r in enumerate(set1)]
-  set2 = [util.build_features4(r, i, step=step, version=version) for i, r in enumerate(set2)]
+  set1 = [util_2.build_features4(r, i, step=step, version=version) for i, r in enumerate(set1)]
+  set2 = [util_2.build_features4(r, i, step=step, version=version) for i, r in enumerate(set2)]
 
 
 

@@ -77,8 +77,8 @@ class DataAccess:
 
     split_train = set([i for i in seed.sample(range(200), size_train)])
     ## split 200 trips
-    rides_train = [rides[i] for i in split_train]
-    rides_test = [rides[i] for i in range(200) if i not in split_train]
+    rides_train = [rides[i] for i in split_train] ## len(rides_train) = 180
+    rides_test = [rides[i] for i in range(200) if i not in split_train] ## len(rides_test) = 20
     # print("rides_train: {}\n rides_test: {}\n".format(rides_train, rides_test))
     return rides_train, rides_test
 
@@ -92,6 +92,4 @@ class DataAccess:
         yield self.get_ride(driver_id, ride_id)
       else:
         yield self.get_ride_segments(driver_id, ride_id, version=version)
-
-
 
