@@ -7,6 +7,7 @@ from sklearn.model_selection import KFold
 from sklearn.decomposition import TruncatedSVD
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from scipy.sparse import vstack
+from sklearn.externals import joblib
 import scipy
 
 from data_access import DataAccess
@@ -833,7 +834,8 @@ def run_model_2(arr):
   assert(trainX.shape[0] == len(trainY))
   assert(testX.shape[0] == len(testY))
 
-  model = Model(trainX, trainY, driver_id)
+  model = joblib.load("myGpsClassificationModel.pkl")
+  # model = Model(trainX, trainY, driver_id)
   predictions = model.predict(testX)
 
   # if settings.ENABLE_CACHE:

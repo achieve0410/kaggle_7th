@@ -6,6 +6,7 @@ from sklearn.svm import LinearSVC, SVC
 from sklearn.tree import DecisionTreeClassifier
 from scipy.special import expit
 import scipy
+from sklearn.externals import joblib
 
 class Model_RFC:
 
@@ -166,11 +167,13 @@ class Model_LR2:
         C=0.001,
         random_state=sum(seed)
     )
-
+    print("\n\n Model Training \n\n")
     self.model.fit(trainX, trainY)
+    joblib.dump(self.model, 'myGpsClassificationModel.pkl')
 
   def predict(self, testX):
     # predictions = self.model.predict_proba(testX)[:,1]
+    print("\n\n Prediction \n\n")
     predictions = self.model.predict(testX)
     return predictions
 

@@ -4,6 +4,7 @@ import random
 
 import util
 import settings
+from datetime import datetime
 
 class DataAccess:
 
@@ -103,8 +104,11 @@ class DataAccess:
     return X, Y
 
   def get_rides_test(self, driver_ids, size_test, segments=False, version=1):
-    driver_id = driver_ids[4:6]
-    seed = random.Random(x=sum(driver_id))
+    # tripList = [1,50, 70, 144, 800, 1400, 1553, 2106, 2653, 3159, 3300]
+    # driver_id = driver_ids[tripList]
+    # split_train = set([i for i in seed.sample(range(200), size_train)])
+    seed = random.Random(x=datetime.now())
+    driver_id = set([driver_ids[i] for i in seed.sample(range(len(driver_ids)), 4)])
     X = []
     Y = []
 

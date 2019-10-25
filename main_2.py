@@ -30,6 +30,6 @@ if __name__ == '__main__':
   # predictions = np.array(list(itertools.chain(*[r[0] for r in results])))
   # testY = list(itertools.chain(*[r[-1] for r in results]))
   # print("results: {}\ntestY: {}\npredictions :{}".format(results, testY, predictions))
-  print(results[0][0], results[0][1], results[1], results[2])
+  # print(results[0][0], results[0][1], results[1], results[2])
   # print(len(results), len(testY), len(predictions))
   # logging.info(util.compute_auc(testY, predictions))
