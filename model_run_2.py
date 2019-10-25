@@ -419,8 +419,8 @@ def get_data_movements_accel(model_id, driver_id, repeat, test=False, step=3, tf
     
   else:
     driver_train, driver_test = da.get_rides_split(driver_id, settings.BIG_CHUNK, segments=False) ## 180:20 split
-    other_train = list(da.get_random_rides(settings.BIG_CHUNK * repeat, driver_id, segments=False, seed=seed)) ## 
-    other_test = list(da.get_random_rides(settings.SMALL_CHUNK, driver_id, segments=False))
+    other_train = list(da.get_random_rides(settings.BIG_CHUNK * repeat, driver_id, segments=False, seed=seed)) ## random rider 180 trip
+    other_test = list(da.get_random_rides(settings.SMALL_CHUNK, driver_id, segments=False)) ## random rider 20 trip
     # print("driver_train: {}, {}, \n\ndriver_test: {}, {}".format(driver_train[:1], len(driver_train), driver_test[:1], len(driver_test)))
 
 
@@ -457,6 +457,54 @@ def get_data_movements_accel_svd(model_id, driver_id, repeat, test=False):
   set2 = svd.transform(set2)
 
   return set1, set2
+
+def get_data_movements_accel_2(model_id, driver_id, repeat, test=False, step=3, tf=False, extra=((1,15),2), version=1):
+  seed = random.Random(x=sum(driver_id)+model_id)
+  da = DataAccess()
+  ngram_range, min_df = extra
+
+  # if test:
+  #   set1 = list(da.get_rides(driver_id))
+  #   set2 = list(da.get_random_rides(settings.BIG_CHUNK_TEST * repeat, driver_id, segments=False, seed=seed))
+    
+  # else:
+  # driver_train, driver_test = da.get_rides_split(driver_id, settings.BIG_CHUNK, segments=False) ## 180:20 split
+  # other_train = list(da.get_random_rides(settings.BIG_CHUNK * repeat, driver_id, segments=False, seed=seed)) ## random rider 180 trip
+  # other_test = list(da.get_random_rides(settings.SMALL_CHUNK, driver_id, segments=False)) ## random rider 20 trip
+  train_x, train_y = da.get_rides_train(driver_id, settings.BIG_CHUNK, segments=False) ## train set
+  # print("train_x: {}\ntrain_y: {}".format(len(train_x), len(train_y)))
+  # print("train_x: {}\ntrain_y: {}".format(len(train_x[0]), len(train_y[0])))
+  # print(train_x[0], train_x[200], train_x[400], train_x[600], train_x[800])
+  # print(train_y[0], train_y[200], train_y[400], train_y[600], train_y[800])
+  test_x, test_y = da.get_rides_test(driver_id, settings.SMALL_CHUNK, segments=False) ## test set
+  # print("test_x: {}\ntest_y: {}".format(len(test_x), len(test_y)))
+  # print("test_x: {}\ntest_y: {}".format(len(test_x[0]), len(test_y[0])))
+  # print(test_x[0], test_x[19])
+  # print(test_y[0], test_y[19], test_y[20], test_y[39])
+  # print("driver_train: {}, {}, \n\ndriver_test: {}, {}".format(driver_train[:1], len(driver_train), driver_test[:1], len(driver_test)))
+
+
+  set1 = train_x
+  set2 = test_x
+
+  # print("set1: {}, {}, \n\nset2: {}, {}".format(set1[:1], len(set1), set2[:1], len(set2)))
+
+  set1 = [util_2.build_features4(r, i, step=step, version=version) for i, r in enumerate(set1)]
+  set2 = [util_2.build_features4(r, i, step=step, version=version) for i, r in enumerate(set2)]
+
+
+
+  # print(set2[0], len(set2[0]))
+
+  if tf:
+    vectorizer = TfidfVectorizer(min_df=min_df, ngram_range=ngram_range)
+  else:
+    vectorizer = CountVectorizer(min_df=min_df, ngram_range=ngram_range)
+
+  set1 = vectorizer.fit_transform(set1)
+  set2 = vectorizer.transform(set2)
+
+  return set1, set2, train_y, test_y
 
 def get_data_accel(model_id, driver_id, repeat, test=False):
   seed = random.Random(x=driver_id+model_id)
@@ -748,6 +796,51 @@ def get_data_heading_stops_v2(model_id, driver_id, repeat, test=False):
 
 HEADING_DATA_FUNCTIONS = (get_data_heading, get_data_heading_v2, get_data_heading_svd, \
     get_data_heading_stops, get_data_heading_v3, get_data_heading_stops_v2)
+
+# def run_model(model_id, driver_id, Model, get_data, repeat):
+def run_model_2(arr):
+  model_id = arr[0]
+  driver_id = arr[1]
+  Model = arr[2]
+  get_data = arr[3]
+  repeat = arr[4]
+  print("model_id: {}, driver_id: {}, Model: {}, get_data: {}, repeat: {}".format(model_id, driver_id, Model, get_data, repeat))
+  # testY = [1] * settings.SMALL_CHUNK + [0] * settings.SMALL_CHUNK
+
+  # if settings.ENABLE_CACHE:
+  #   predictions = util.get_results(Model, get_data, driver_id, False, repeat)
+  #   if predictions is not False:
+  #     return predictions, testY
+
+  multiplier = 4 if get_data in HEADING_DATA_FUNCTIONS else 1
+
+  # trainY = [1] * settings.BIG_CHUNK * multiplier * repeat + \
+  #     [0] * settings.BIG_CHUNK * multiplier * repeat
+  trainX, testX, trainY, testY = get_data(model_id, driver_id, repeat)
+  # print(trainX.shape[0], testX.shape[0], trainX.shape[1], testX.shape[1])
+
+  if type(trainX) in [scipy.sparse.csr.csr_matrix, scipy.sparse.coo.coo_matrix]:
+    trainX = scipy.sparse.vstack(
+        [trainX[:settings.BIG_CHUNK * multiplier]] * repeat +
+        [trainX[settings.BIG_CHUNK * multiplier:]]
+    )
+  else:
+    trainX = np.vstack((
+        np.tile(np.array(trainX[:settings.BIG_CHUNK * multiplier]).T, repeat).T,
+        trainX[settings.BIG_CHUNK * multiplier:]
+    ))
+
+  assert(trainX.shape[0] == len(trainY))
+  assert(testX.shape[0] == len(testY))
+
+  model = Model(trainX, trainY, driver_id)
+  predictions = model.predict(testX)
+
+  # if settings.ENABLE_CACHE:
+  #   util.cache_results(Model, get_data, driver_id, False, predictions, repeat)
+
+  return predictions, testY
+
 
 # def run_model(model_id, driver_id, Model, get_data, repeat):
 def run_model(arr):

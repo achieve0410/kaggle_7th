@@ -25,7 +25,7 @@ if __name__ == '__main__':
   # )
   results = pool.map(
       run_model,
-      map(lambda x: [100, x, model_def.Model_LR2, model_run.get_data_movements_accel, 1], settings.DRIVER_IDS[:3])
+      map(lambda x: [100, x, model_def.Model_LR, model_run.get_data_movements_accel, 1], settings.DRIVER_IDS[:3])
   )
   ## model_id, driver_id, Model, get_data, repeat
   # results = run_model(100, settings.DRIVER_IDS[10], model_def.Model_GBC, model_run.get_data_movements_accel, 1)

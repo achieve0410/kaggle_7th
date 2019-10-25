@@ -23,6 +23,10 @@ class DataAccess:
     for ride_id in range(1, 201):
       yield self.get_ride(driver_id, ride_id)
 
+  def get_rides_2(self, driver_id, size):
+    for ride_id in range(1, size+1):
+      yield self.get_ride(driver_id, ride_id)
+
   def get_ride_segments(self, driver_id, ride_id, version=1):
     filename = '%s/%s_%s.csv' % (settings.SEGMENTS_FOLDER[version], driver_id, ride_id)
     data = open(filename, 'r').read()
@@ -66,7 +70,6 @@ class DataAccess:
         sample.append(new)
     return sample
 
-
   def get_rides_split(self, driver_id, size_train, segments=False, version=1):
     seed = random.Random(x=driver_id)
     if not segments:
@@ -82,6 +85,41 @@ class DataAccess:
     # print("rides_train: {}\n rides_test: {}\n".format(rides_train, rides_test))
     return rides_train, rides_test
 
+  def get_rides_train(self, driver_ids, size_train, segments=False, version=1):
+    seed = random.Random(x=sum(driver_ids))
+    X = []
+    Y = []
+
+    for driver in driver_ids:
+      rides = list(self.get_rides(driver)) ## rides[0] = gps of 842 row data, rides[1] = gps of 958 row data, ...
+      # print(len(rides[0]))
+
+      train_x = [rides[i] for i in range(200)] ## len(train_x) = 200
+      train_y = [driver for i in range(200)] ## len(train_y) = 200
+      print("driver_id: {}\ntrain_x: {}\n train_y: {}\n".format(driver, len(train_x), train_y))
+      X.extend(train_x)
+      Y.extend(train_y)
+
+    return X, Y
+
+  def get_rides_test(self, driver_ids, size_test, segments=False, version=1):
+    driver_id = driver_ids[4:6]
+    seed = random.Random(x=sum(driver_id))
+    X = []
+    Y = []
+
+    for driver in driver_id:
+      rides = list(self.get_rides_2(driver, size_test)) ## rides[0] = gps of 842 row data, rides[1] = gps of 958 row data, ...
+      # print(len(rides[0]))
+
+      test_x = [rides[i] for i in range(size_test)] ## len(test_x) = 20
+      test_y = [driver for i in range(size_test)] ## len(test_y) = 20
+      print("driver_id: {}\ntest_x: {}\n test_y: {}\n".format(driver, len(test_x), test_y))
+      X.extend(test_x)
+      Y.extend(test_y)
+
+    return X, Y
+
   def get_random_rides(self, size, driver_id, seed=None, segments=False, version=1):
     if not seed:
       seed = random.Random(x=driver_id)
@@ -92,4 +130,3 @@ class DataAccess:
         yield self.get_ride(driver_id, ride_id)
       else:
         yield self.get_ride_segments(driver_id, ride_id, version=version)
-

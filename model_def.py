@@ -164,13 +164,14 @@ class Model_LR2:
   def __init__(self, trainX, trainY, seed):
     self.model = LogisticRegression(
         C=0.001,
-        random_state=seed
+        random_state=sum(seed)
     )
 
     self.model.fit(trainX, trainY)
 
   def predict(self, testX):
-    predictions = self.model.predict_proba(testX)[:,1]
+    # predictions = self.model.predict_proba(testX)[:,1]
+    predictions = self.model.predict(testX)
     return predictions
 
 class Model_LR3:
