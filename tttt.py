@@ -1,6 +1,5 @@
-aList = [1,2,3,4,5,6,7,8,9,0,11]
+import numpy as np
 
-temp = [1,3,4]
+myList = [[1,2], [2,3], [3,4], [4,5]]
 
-bList = aList[temp]
-print(bList)
+np.savetxt('output.csv', myList, delimiter=',', fmt='%1.2f')

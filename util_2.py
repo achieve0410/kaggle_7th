@@ -741,7 +741,7 @@ def build_features4(ride, index, step=3, version=1):
   ACCEL_THR = np.array([-3, -1.5, -0.3, 0.3, 1.5, 3]) * step
   accel = np.digitize(accel, ACCEL_THR)
 
-  # print("distances : {}, angles : {}, accel: {}".format(distances, angles, accel))
+  print("distances : {}, angles : {}, accel: {}".format(distances, angles, accel))
 
   movements = np.vstack((distances, angles, accel)).transpose()
   movement_string = ' '.join(['%s_%s_%s' % (m[0], m[1], m[2]) for m in movements])
