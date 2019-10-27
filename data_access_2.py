@@ -26,8 +26,8 @@ class DataAccess:
       yield self.get_ride(driver_id, ride_id)
 
   def get_rides_2(self, driver_id, size):
-    ride_range = settings_2.RIDE_IDS[driver_id]
-    for ride_id in range(0, ride_range):
+    ride_range = 5
+    for ride_id in range(5):
       yield self.get_ride(driver_id, ride_id)
 
   def get_ride_segments(self, driver_id, ride_id, version=1):
@@ -125,8 +125,8 @@ class DataAccess:
       print(settings_2.RIDE_IDS[driver])
       # print(len(rides[0]))
 
-      test_x = [rides[i] for i in range(settings_2.RIDE_IDS[driver])] ## len(test_x) = 20
-      test_y = [driver for i in range(settings_2.RIDE_IDS[driver])] ## len(test_y) = 20
+      test_x = [rides[i] for i in range(5)] ## len(test_x) = 20
+      test_y = [driver for i in range(5)] ## len(test_y) = 20
       print("driver_id: {}\ntest_x: {}\n test_y: {}\n".format(driver, len(test_x), test_y))
       X.extend(test_x)
       Y.extend(test_y)
