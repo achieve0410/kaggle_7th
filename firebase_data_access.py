@@ -2,7 +2,7 @@ import pyrebase
 import numpy as np
 
 config = {
-  "apiKey": "AIzaSyApQcCaXPZ8wAwK0m0NF-dBIzDuMF22NHk",
+  "apiKey": "#",
   "authDomain": "vlogger-driving-data.firebaseapp.com",
   "databaseURL": "https://vlogger-driving-data-160bb.firebaseio.com",
   "storageBucket": "vlogger-driving-data.appspot.com"
