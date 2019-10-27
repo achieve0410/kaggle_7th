@@ -1,5 +1,3 @@
-import numpy as np
 
-myList = [[1,2], [2,3], [3,4], [4,5]]
-
-np.savetxt('output.csv', myList, delimiter=',', fmt='%1.2f')
+myList = list(range(0, 7)) + list([8, 11, 15, 16, 19])
+print(myList)

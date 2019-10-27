@@ -10,6 +10,7 @@ from scipy.signal import savgol_filter
 from sklearn.metrics import roc_curve, auc
 
 import settings
+import settings_2
 
 OUTLIER_LIMIT = 60
 FLOAT_ERROR = 0.000001

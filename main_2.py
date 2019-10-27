@@ -8,6 +8,7 @@ from model_run_2 import run_model, test_model
 import model_run_2
 import model_def
 import settings
+import settings_2
 import util_2
 
 logging.root.setLevel(level=logging.INFO)
@@ -17,7 +18,8 @@ if __name__ == '__main__':
   logging.info('starting main.py')
 
   #run_model((100, 203, model_def.Model_GBC, model_run.get_data_accel_v2_svd, 1)); raise Exception
-  results = model_run_2.run_model_2( [100, settings.DRIVER_IDS[:10], model_def.Model_LR2, model_run_2.get_data_movements_accel_2, 1] )
+  # d = list(range(0, 7)) + list([8, 11, 15, 16, 19])
+  results = model_run_2.run_model_2( [100, settings_2.DRIVER_IDS[:], model_def.Model_LR2, model_run_2.get_data_movements_accel_2, 1] )
 
   # pool = multiprocessing.Pool(processes=1)
   # results = pool.map(
@@ -26,7 +28,7 @@ if __name__ == '__main__':
       # model_run_2.run_model_2,
       # map(lambda x: [100, x, model_def.Model_LR2, model_run_2.get_data_movements_accel, 1], settings.DRIVER_IDS[:5])
   # )
-  for i in range(60):
+  for i in range(15):
       if(i%3==0):
           print("\nprediction: {}, testY: {}".format(results[0][i], results[1][i]), end=' // ')
       else:

@@ -11,9 +11,11 @@ from sklearn.externals import joblib
 import scipy
 
 from data_access import DataAccess
+import data_access_2
 import heading
 from model_def import Model_LR, Model_RFC, Model_SVC
 import settings
+import settings_2
 import util_2
 
 def get_data_basic_big(model_id, driver_id, repeat, test=False, version=1):
@@ -461,7 +463,7 @@ def get_data_movements_accel_svd(model_id, driver_id, repeat, test=False):
 
 def get_data_movements_accel_2(model_id, driver_id, repeat, test=False, step=3, tf=False, extra=((1,15),2), version=1):
   seed = random.Random(x=sum(driver_id)+model_id)
-  da = DataAccess()
+  da = data_access_2.DataAccess()
   ngram_range, min_df = extra
 
   # if test:
@@ -484,6 +486,11 @@ def get_data_movements_accel_2(model_id, driver_id, repeat, test=False, step=3, 
   # print(test_y[0], test_y[19], test_y[20], test_y[39])
   # print("driver_train: {}, {}, \n\ndriver_test: {}, {}".format(driver_train[:1], len(driver_train), driver_test[:1], len(driver_test)))
 
+  print("\n\n\n\n\n")
+  print("train_X, train_Y: {}, {}".format(len(train_x), len(train_y)))
+  print("test_X, test_Y: {}, {}".format(len(test_x), len(test_y)))
+  print("\n\n\n\n\n")
+  
 
   set1 = train_x
   set2 = test_x
@@ -820,16 +827,16 @@ def run_model_2(arr):
   trainX, testX, trainY, testY = get_data(model_id, driver_id, repeat)
   # print(trainX.shape[0], testX.shape[0], trainX.shape[1], testX.shape[1])
 
-  if type(trainX) in [scipy.sparse.csr.csr_matrix, scipy.sparse.coo.coo_matrix]:
-    trainX = scipy.sparse.vstack(
-        [trainX[:settings.BIG_CHUNK * multiplier]] * repeat +
-        [trainX[settings.BIG_CHUNK * multiplier:]]
-    )
-  else:
-    trainX = np.vstack((
-        np.tile(np.array(trainX[:settings.BIG_CHUNK * multiplier]).T, repeat).T,
-        trainX[settings.BIG_CHUNK * multiplier:]
-    ))
+  # if type(trainX) in [scipy.sparse.csr.csr_matrix, scipy.sparse.coo.coo_matrix]:
+  #   trainX = scipy.sparse.vstack(
+  #       [trainX[:settings.BIG_CHUNK * multiplier]] * repeat +
+  #       [trainX[settings.BIG_CHUNK * multiplier:]]
+  #   )
+  # else:
+  #   trainX = np.vstack((
+  #       np.tile(np.array(trainX[:settings.BIG_CHUNK * multiplier]).T, repeat).T,
+  #       trainX[settings.BIG_CHUNK * multiplier:]
+  #   ))
 
   assert(trainX.shape[0] == len(trainY))
   assert(testX.shape[0] == len(testY))
