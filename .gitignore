@@ -126,6 +126,7 @@ dmypy.json
 .zip
 .csv
 .pkl
+.json
 *.zip
 *.csv
 
