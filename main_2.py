@@ -26,7 +26,14 @@ if __name__ == '__main__':
       # model_run_2.run_model_2,
       # map(lambda x: [100, x, model_def.Model_LR2, model_run_2.get_data_movements_accel, 1], settings.DRIVER_IDS[:5])
   # )
-  print("prediction: {}\ntestY: {}".format(results[0], results[1]))
+  for i in range(60):
+      if(i%3==0):
+          print("\nprediction: {}, testY: {}".format(results[0][i], results[1][i]), end=' // ')
+      else:
+          print("prediction: {}, testY: {}".format(results[0][i], results[1][i]), end=' // ')
+            
+              
+  # print("prediction: {}\ntestY: {}".format(results[0], results[1]))
   # predictions = np.array(list(itertools.chain(*[r[0] for r in results])))
   # testY = list(itertools.chain(*[r[-1] for r in results]))
   # print("results: {}\ntestY: {}\npredictions :{}".format(results, testY, predictions))

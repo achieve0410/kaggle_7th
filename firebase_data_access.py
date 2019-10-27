@@ -2,7 +2,7 @@ import pyrebase
 import numpy as np
 
 config = {
-  "apiKey": "AIzaSyApQcCaXPZ8wAwK0m0NF-dBIzDuMF22NHk",
+  "apiKey": "#",
   "authDomain": "vlogger-driving-data.firebaseapp.com",
   "databaseURL": "https://vlogger-driving-data-160bb.firebaseio.com",
   "storageBucket": "vlogger-driving-data.appspot.com"
@@ -25,6 +25,8 @@ driver_ids = list(driver_ids)
 # print(driver_ids)
 
 for driver_idx, driver in enumerate(driver_ids):
+  if(driver_idx<6):
+    continue
   print(driver)
   date_path = driver_path + '/' + str(driver)
   dates = db.child(date_path).get().val().keys()
@@ -32,15 +34,27 @@ for driver_idx, driver in enumerate(driver_ids):
   # print(dates)
 
   for date in dates:
-    # print(date)
+    print(date)
     trip_path = date_path + '/' + str(date)
-    trips = db.child(trip_path).get().val().keys()
-    trips = list(trips)
+    print(trip_path)      
+    if(date=='null'):
+      print('null')
+      trips = ['0']
+      print(trips)
+    else:
+      trips = db.child(trip_path).get().val().keys()
+      trips = list(trips)
+      # print(trips)
+    # print(trips)
     # print(trips)
 
     for trip_idx, trip in enumerate(trips):
+      print(trip_idx)
+      if(driver_idx==6 and trip_idx<=39):
+        continue
       print(trip)
       point_path = trip_path + '/' + str(trip)
+      print(point_path)
 
       ## no data trip exception
       if(db.child(point_path).get().val()==0):
@@ -72,7 +86,8 @@ for driver_idx, driver in enumerate(driver_ids):
       
       if(trip_data!=[]):
         np.savetxt(str(driver_idx) + '_' + str(trip_idx) + '.csv', trip_data, delimiter=',', fmt='%1.8f')
-      print("\n\n trip data: {}\n\n".format(trip_data))
+        print("In driver_id: {}, trip_id: {}".format(driver_idx, trip_idx))
+        print("\n\n trip data: {}\n\n".format(trip_data))
   
 ##############################################################################################################################
 # test_path = 'test/trips/2n7HORuZsUdRmaMddyQttOJ2PqH3/201903/1552005998/1552006063'

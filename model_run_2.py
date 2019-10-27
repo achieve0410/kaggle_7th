@@ -834,8 +834,8 @@ def run_model_2(arr):
   assert(trainX.shape[0] == len(trainY))
   assert(testX.shape[0] == len(testY))
 
-  model = joblib.load("myGpsClassificationModel.pkl")
-  # model = Model(trainX, trainY, driver_id)
+  # model = joblib.load("myGpsClassificationModel.pkl")
+  model = Model(trainX, trainY, driver_id)
   predictions = model.predict(testX)
 
   # if settings.ENABLE_CACHE:

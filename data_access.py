@@ -108,7 +108,7 @@ class DataAccess:
     # driver_id = driver_ids[tripList]
     # split_train = set([i for i in seed.sample(range(200), size_train)])
     seed = random.Random(x=datetime.now())
-    driver_id = set([driver_ids[i] for i in seed.sample(range(len(driver_ids)), 4)])
+    driver_id = set([driver_ids[i] for i in seed.sample(range(len(driver_ids)), 3)])
     X = []
     Y = []
 
