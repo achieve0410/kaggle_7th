@@ -1,5 +1,3 @@
-import numpy as np
+myList = [i*0.005 for i in range(0, 1001, 1)]
 
-myList = [[1,2], [2,3], [3,4], [4,5]]
-
-np.savetxt('output.csv', myList, delimiter=',', fmt='%1.2f')
+print(myList)
