@@ -28,7 +28,7 @@ if __name__ == '__main__':
       # model_run_2.run_model_2,
       # map(lambda x: [100, x, model_def.Model_LR2, model_run_2.get_data_movements_accel, 1], settings.DRIVER_IDS[:5])
   # )
-  for i in range(6):
+  for i in range(20):
       if(i%3==0):
           print("\nprediction: {}, testY: {}".format(results[0][i], results[1][i]), end=' // ')
       else:

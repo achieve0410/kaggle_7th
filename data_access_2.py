@@ -120,12 +120,12 @@ class DataAccess:
     print(driver_ids)
 
     for driver in driver_ids:
-      rides = list(self.get_rides_2(driver, 3)) ## rides[0] = gps of 842 row data, rides[1] = gps of 958 row data, ...
+      rides = list(self.get_rides_2(driver, 10)) ## rides[0] = gps of 842 row data, rides[1] = gps of 958 row data, ...
       print(driver, len(rides))
       # print(len(rides[0]))
 
-      test_x = [rides[i] for i in range(3)] ## len(test_x) = 20
-      test_y = [driver for i in range(3)] ## len(test_y) = 20
+      test_x = [rides[i] for i in range(10)] ## len(test_x) = 20
+      test_y = [driver for i in range(10)] ## len(test_y) = 20
       print("driver_id: {}\ntest_x: {}\n test_y: {}\n".format(driver, len(test_x), test_y))
       X.extend(test_x)
       Y.extend(test_y)
