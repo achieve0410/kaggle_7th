@@ -12,12 +12,12 @@ class DataAccess:
     return settings_2.DRIVER_IDS
 
   def get_ride(self, driver_id, ride_id):
-    filename = '%s/%s/%s_%s.csv' % (settings_2.DATA_FOLDER, driver_id, driver_id, ride_id)
+    filename = '%s/%s/logfile%s.csv' % (settings_2.DATA_FOLDER, driver_id, ride_id)
     # print("filename : {}".format(filename))
-    data = open(filename, 'r').read()
-    data = [[float(x) for x in row.split(',')] for row in data.split('\n')[0:-1]]
-    # if(ride_id==1):
-    #   print("aa: {}".format(data[:30]))
+    data = open(filename, 'r').readlines()
+    d = []
+    for i in data:
+          print(i)
     return data
 
   def get_rides(self, driver_id):

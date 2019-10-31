@@ -5,7 +5,7 @@
 DRIVER_IDS = [0, 1, 2, 3, 5, 6, 8, 11, 15, 16, 19]
 RIDE_IDS = [18, 11, 19, 77, 351, 35, 58, 8, 36, 4, 1, 12, 1, 9, 5, 19, 16, 2, 3, 31]
 
-DATA_FOLDER = 'firebase'
+DATA_FOLDER = 'turn'
 SEGMENTS_FOLDER = {
     1: 'segments', # used in final submission
     2: 'segments_v2', # not used

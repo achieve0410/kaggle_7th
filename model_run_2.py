@@ -17,6 +17,7 @@ from model_def import Model_LR, Model_RFC, Model_SVC
 import settings
 import settings_2
 import util_2
+from datetime import datetime
 
 def get_data_basic_big(model_id, driver_id, repeat, test=False, version=1):
   seed = random.Random(x=driver_id+model_id)
@@ -513,6 +514,43 @@ def get_data_movements_accel_2(model_id, driver_id, repeat, test=False, step=3, 
   set2 = vectorizer.transform(set2)
 
   return set1, set2, train_y, test_y
+
+def get_data_movements_accel_3(model_id, driver_id, repeat, test=False, step=3, tf=False, extra=((1,15),2), version=1):
+  seed = random.Random(x=datetime.now())
+  da = data_access_2.DataAccess()
+  ngram_range, min_df = extra
+
+  train_x, train_y = da.get_rides_train(driver_id, settings.BIG_CHUNK, segments=False) ## train set
+  test_x, test_y = da.get_rides_test(driver_id, settings.SMALL_CHUNK, segments=False) ## test set
+
+  print("\n\n\n\n\n")
+  print("train_X, train_Y: {}, {}".format(len(train_x), len(train_y)))
+  print("test_X, test_Y: {}, {}".format(len(test_x), len(test_y)))
+  print("\n\n\n\n\n")
+  
+
+  set1 = train_x
+  set2 = test_x
+
+  # print("set1: {}, {}, \n\nset2: {}, {}".format(set1[:1], len(set1), set2[:1], len(set2)))
+
+  set1 = [util_2.build_features4(r, i, step=step, version=version) for i, r in enumerate(set1)]
+  set2 = [util_2.build_features4(r, i, step=step, version=version) for i, r in enumerate(set2)]
+
+
+
+  # print(set2[0], len(set2[0]))
+
+  if tf:
+    vectorizer = TfidfVectorizer(min_df=min_df, ngram_range=ngram_range)
+  else:
+    vectorizer = CountVectorizer(min_df=min_df, ngram_range=ngram_range)
+
+  set1 = vectorizer.fit_transform(set1)
+  set2 = vectorizer.transform(set2)
+
+  return set1, set2, train_y, test_y
+
 
 def get_data_accel(model_id, driver_id, repeat, test=False):
   seed = random.Random(x=driver_id+model_id)
