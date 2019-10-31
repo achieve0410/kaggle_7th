@@ -12,22 +12,23 @@ class DataAccess:
     return settings_2.DRIVER_IDS
 
   def get_ride(self, driver_id, ride_id):
-    filename = '%s/%s/logfile%s.csv' % (settings_2.DATA_FOLDER, driver_id, ride_id)
+    filename = '%s/%s/logfile%s.txt' % (settings_2.DATA_FOLDER, driver_id, ride_id)
     # print("filename : {}".format(filename))
     data = open(filename, 'r').readlines()
     d = []
     for i in data:
-          print(i)
-    return data
+          dat = i[46:53]
+          d.append(float(dat))
+    return d
 
   def get_rides(self, driver_id):
-    ride_range = settings_2.RIDE_IDS[driver_id]
-    for ride_id in range(0, ride_range):
+    for ride_id in range(1, 11, 1):
       yield self.get_ride(driver_id, ride_id)
 
   def get_rides_2(self, driver_id, size):
-    ride_range = 5
-    for ride_id in range(5):
+    seed = random.Random(x=datetime.now())
+    rides = set([i for i in seed.sample(10, size)])
+    for ride_id in rides:
       yield self.get_ride(driver_id, ride_id)
 
   def get_ride_segments(self, driver_id, ride_id, version=1):
@@ -89,19 +90,19 @@ class DataAccess:
     return rides_train, rides_test
 
   def get_rides_train(self, driver_ids, size_train, segments=False, version=1):
-    seed = random.Random(x=sum(driver_ids))
+    seed = random.Random(x=datetime.now())
     X = []
     Y = []
 
     for driver in driver_ids:
       rides = list(self.get_rides(driver)) ## rides[0] = gps of 842 row data, rides[1] = gps of 958 row data, ...
-      # print(len(rides[0]))
+      print(len(rides))
 
       # print(driver, len(rides))
       # print(settings_2.RIDE_IDS[driver])
 
-      train_x = [rides[i] for i in range(settings_2.RIDE_IDS[driver])] ## len(train_x) = 200
-      train_y = [driver for i in range(settings_2.RIDE_IDS[driver])] ## len(train_y) = 200
+      train_x = [rides[i] for i in range(10)] ## len(train_x) = 200
+      train_y = [driver for i in range(10)] ## len(train_y) = 200
       print("driver_id: {}\ntrain_x: {}\n train_y: {}\n".format(driver, len(train_x), train_y))
       X.extend(train_x)
       Y.extend(train_y)
@@ -113,16 +114,14 @@ class DataAccess:
     # driver_id = driver_ids[tripList]
     # split_train = set([i for i in seed.sample(range(200), size_train)])
     seed = random.Random(x=datetime.now())
-    driver_id = set([driver_ids[i] for i in seed.sample(range(len(driver_ids)), 3)])
     X = []
     Y = []
 
-    print(driver_id)
+    print(driver_ids)
 
-    for driver in driver_id:
-      rides = list(self.get_rides_2(driver, size_test)) ## rides[0] = gps of 842 row data, rides[1] = gps of 958 row data, ...
+    for driver in driver_ids:
+      rides = list(self.get_rides_2(driver, 3)) ## rides[0] = gps of 842 row data, rides[1] = gps of 958 row data, ...
       print(driver, len(rides))
-      print(settings_2.RIDE_IDS[driver])
       # print(len(rides[0]))
 
       test_x = [rides[i] for i in range(5)] ## len(test_x) = 20

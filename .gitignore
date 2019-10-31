@@ -125,7 +125,7 @@ dmypy.json
 ## data file
 .zip
 .csv
-
+.txt
 
 .pkl
 .json
