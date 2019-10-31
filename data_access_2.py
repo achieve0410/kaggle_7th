@@ -13,7 +13,7 @@ class DataAccess:
 
   def get_ride(self, driver_id, ride_id):
     filename = '%s/%s/logfile%s.txt' % (settings_2.DATA_FOLDER, driver_id, ride_id)
-    # print("filename : {}".format(filename))
+    print("filename : {}".format(filename))
     data = open(filename, 'r').readlines()
     d = []
     for i in data:
@@ -27,7 +27,7 @@ class DataAccess:
 
   def get_rides_2(self, driver_id, size):
     seed = random.Random(x=datetime.now())
-    rides = set([i for i in seed.sample(10, size)])
+    rides = set([i for i in seed.sample(list(range(1, 11, 1)), size)])
     for ride_id in rides:
       yield self.get_ride(driver_id, ride_id)
 
@@ -124,8 +124,8 @@ class DataAccess:
       print(driver, len(rides))
       # print(len(rides[0]))
 
-      test_x = [rides[i] for i in range(5)] ## len(test_x) = 20
-      test_y = [driver for i in range(5)] ## len(test_y) = 20
+      test_x = [rides[i] for i in range(3)] ## len(test_x) = 20
+      test_y = [driver for i in range(3)] ## len(test_y) = 20
       print("driver_id: {}\ntest_x: {}\n test_y: {}\n".format(driver, len(test_x), test_y))
       X.extend(test_x)
       Y.extend(test_y)

@@ -709,43 +709,45 @@ def build_features4(ride, index, step=3, version=1):
   a1 = np.array(ride1 - ride0)
   a2 = np.array(ride2 - ride1)
 
-  distances1 = np.linalg.norm(a1, axis=1)
-  distances2 = np.linalg.norm(a2, axis=1)
+  distances1 = np.linalg.norm(a1, axis=0)
+  distances2 = np.linalg.norm(a2, axis=0)
   distances = (distances1 + distances2)
   accel = distances2 - distances1
 
-  distances3 = np.linalg.norm(a1, axis=1).reshape(-1, 1)
-  distances4 = np.linalg.norm(a2, axis=1).reshape(-1, 1)
-  distance = (distances3 + distances4)
-  accels = distances3 - distances4
+  # print(distances, accel)
 
-  result = np.hstack([distance, accels])
-  np.savetxt('result/output'+str(index)+'.csv', result, delimiter=',', fmt='%1.2f')
+  # distances3 = np.linalg.norm(a1, axis=1).reshape(-1, 1)
+  # distances4 = np.linalg.norm(a2, axis=1).reshape(-1, 1)
+  # distance = (distances3 + distances4)
+  # accels = distances3 - distances4
+
+  # result = np.hstack([distance, accels])
+  # np.savetxt('result/output'+str(index)+'.csv', result, delimiter=',', fmt='%1.2f')
 
   # print("distance1 : {}, distance2 : {}, distance: {}, accel: {}".format(distances2, distances1, distances, accel))
   # print("length of distance1, distance2, distance, accel = {}, {}, {}, {}".format(len(distances1), len(distances2), len(distances), len(accel)))
-  np.seterr(all='ignore')
-  angles = np.arccos((a1 * a2).sum(1) / (distances1 * distances2))
+  # np.seterr(all='ignore')
+  # angles = np.arccos((a1 * a2).sum(1) / (distances1 * distances2))
   # print(angles)
-  np.seterr(all='print')
-  angles[distances1 < MIN_DIST_TH] = 0
-  angles[distances2 < MIN_DIST_TH] = 0
-  angles = angles * 180 / math.pi
+  # np.seterr(all='print')
+  # angles[distances1 < MIN_DIST_TH] = 0
+  # angles[distances2 < MIN_DIST_TH] = 0
+  # angles = angles * 180 / math.pi
 
   if version == 1:
-    DIST_THR = np.array([1, 11, 16, 26, 36, 56, 80]) * step
+    DIST_THR = np.array([-1.5, -1.0, -0.5, 0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0]) * step
   else:
     DIST_THR = np.array([1, 11, 25, 45, 70]) * step
   distances = np.digitize(distances, DIST_THR)
-  ANGL_THR = np.array([10, 30, 60, 100])
-  angles = np.digitize(angles, ANGL_THR)
-  ACCEL_THR = np.array([-3, -1.5, -0.3, 0.3, 1.5, 3]) * step
+  # ANGL_THR = np.array([10, 30, 60, 100])
+  # angles = np.digitize(angles, ANGL_THR)
+  ACCEL_THR = np.array([1e-8, 1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1.0, 1e+1]) * step
   accel = np.digitize(accel, ACCEL_THR)
 
   # print("distances : {}\nangles : {}\naccel: {}\n".format(distances, angles, accel))
 
-  movements = np.vstack((distances, angles, accel)).transpose()
-  movement_string = ' '.join(['%s_%s_%s' % (m[0], m[1], m[2]) for m in movements])
+  movements = np.vstack((distances, accel)).transpose()
+  movement_string = ' '.join(['%s_%s' % (m[0], m[1]) for m in movements])
   # print(movement_string)
 
   return movement_string

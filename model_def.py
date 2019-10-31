@@ -165,7 +165,7 @@ class Model_LR2:
   def __init__(self, trainX, trainY, seed):
     self.model = LogisticRegression(
         C=0.001,
-        random_state=sum(seed)
+        random_state=5
     )
     print("\n\n Model Training \n\n")
     self.model.fit(trainX, trainY)
