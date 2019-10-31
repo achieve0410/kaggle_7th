@@ -538,7 +538,7 @@ def get_data_accel(model_id, driver_id, repeat, test=False):
   return set1, set2
 
 def get_data_accel_v2(model_id, driver_id, repeat, test=False):
-  seed = random.Random(x=driver_id+model_id)
+  seed = random.Random(x=driver_id+model_id) 
   da = DataAccess()
   if test:
     set1 = list(da.get_rides(driver_id)) # first half of the train set

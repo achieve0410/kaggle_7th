@@ -691,7 +691,7 @@ def build_features4(ride, index, step=3, version=1):
   MIN_DIST_TH = 7 if version == 1 else 0.2
   ride2 = np.array(ride)
   ride1 = np.roll(ride2, step, axis=0)
-  ride0 = np.roll(ride1, step, axis=0)
+  ride0 = np.roll(ride1, step, axis=0) 
 
   # if(len(ride2)!=842):
   #       return ' '

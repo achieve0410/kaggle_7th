@@ -106,7 +106,7 @@ class Model_GBC2:
         subsample=0.5,
         max_features='log2',
         random_state=seed
-    )
+    ) 
     if type(trainX) in [scipy.sparse.csr.csr_matrix, scipy.sparse.coo.coo_matrix]:
       trainX = trainX.toarray()
     self.model.fit(trainX, trainY)
