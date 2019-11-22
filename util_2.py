@@ -719,7 +719,7 @@ def build_features4(ride, index, step=3, version=1):
   accels = distances3 - distances4
 
   result = np.hstack([distance, accels])
-  np.savetxt('result/output'+str(index)+'.csv', result, delimiter=',', fmt='%1.2f')
+  # np.savetxt('result/output'+str(index)+'.csv', result, delimiter=',', fmt='%1.2f')
 
   # print("distance1 : {}, distance2 : {}, distance: {}, accel: {}".format(distances2, distances1, distances, accel))
   # print("length of distance1, distance2, distance, accel = {}, {}, {}, {}".format(len(distances1), len(distances2), len(distances), len(accel)))

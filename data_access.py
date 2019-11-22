@@ -28,6 +28,10 @@ class DataAccess:
     for ride_id in range(1, size+1):
       yield self.get_ride(driver_id, ride_id)
 
+  def get_rides_3(self, driver_id, size):
+    for ride_id in range(1, size+1):
+      yield self.get_ride(driver_id, ride_id)
+
   def get_ride_segments(self, driver_id, ride_id, version=1):
     filename = '%s/%s_%s.csv' % (settings.SEGMENTS_FOLDER[version], driver_id, ride_id)
     data = open(filename, 'r').read()
